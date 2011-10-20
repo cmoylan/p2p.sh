@@ -13,14 +13,19 @@ P2P_ROOT=$HOME/Programs/Rails/p2p
 # Show usage and exit if no arguments were passed
 if [ ! -n "$1" ]
 then
+  show_help
+fi
+
+
+# Help text
+show_help() {
   echo "COMMANDS:"
   echo "  b\t - restart apache"
   echo "  t\t - touch tmp/restart.txt in the current working directory"
   echo "  ta\t - touch tmp/restart.txt in core/content under P2P_ROOT"
   echo "  c\t - cd to content directory in P2P_ROOT"
   echo "  cr\t - cd to core direcoty in P2P_ROOT"
-fi
-
+}
 
 # Bounce apache
 bounce() {
@@ -74,5 +79,10 @@ do
     "ta" ) touch_core; touch_content;;
     "cr" | "core") go_core;;
     "c" | "content") go_content;;
+    * )
+      echo "ERROR: Invalid argument"
+      echo ""
+      show_help
+    ;;
   esac
 done
