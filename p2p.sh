@@ -69,9 +69,32 @@ go_content() {
   cd $P2P_ROOT/content
 }
 
+# Switch symlinks between svn and git codebases
+remove_symlinks() {
+  rm $P2P_ROOT/core $P2P_ROOT/content
+}
+
+# TODO: refactor into one function with an argument to indicate git or svn
+switch_to_git() {
+  remove_symlinks
+
+  cd $P2P_ROOT
+  ln -s $P2P_ROOT/git/core core
+  ln -s $P2P_ROOT/git/content content
+  bounce
+}
+
+switch_to_svn() {
+  remove_symlinks
+
+  cd $P2P_ROOT
+  ln -s $P2P_ROOT/trunk/core core
+  ln -s $P2P_ROOT/trunk/content content
+  bounce
+}
+
 # Parse command line args
 for arg in "$@"
-  # TODO: no args - show help
 do
   case "$arg" in
     "b" | "bounce" ) bounce;;
@@ -79,6 +102,8 @@ do
     "ta" ) touch_core; touch_content;;
     "cr" | "core") go_core;;
     "c" | "content") go_content;;
+    "g" | "git" ) switch_to_git;;
+    "svn" ) switch_to_svn;;
     * )
       echo "ERROR: Invalid argument"
       echo ""
