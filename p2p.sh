@@ -25,6 +25,8 @@ show_help() {
   echo "  ta\t - touch tmp/restart.txt in core/content under P2P_ROOT"
   echo "  c\t - cd to content directory in P2P_ROOT"
   echo "  cr\t - cd to core direcoty in P2P_ROOT"
+  echo "  g\t - relink app using git sources"
+  echo "  svn\t - relink app using svn sources"
 }
 
 # Bounce apache
@@ -71,6 +73,7 @@ go_content() {
 
 # Switch symlinks between svn and git codebases
 remove_symlinks() {
+  echo " ----- removing old symlinks -----"
   rm $P2P_ROOT/core $P2P_ROOT/content
 }
 
@@ -79,7 +82,9 @@ switch_to_git() {
   remove_symlinks
 
   cd $P2P_ROOT
+  echo " ----- relinking core -----"
   ln -s $P2P_ROOT/git/core core
+  echo " ----- relinking content -----"
   ln -s $P2P_ROOT/git/content content
   bounce
 }
@@ -88,7 +93,9 @@ switch_to_svn() {
   remove_symlinks
 
   cd $P2P_ROOT
+  echo " ----- relinking content -----"
   ln -s $P2P_ROOT/trunk/core core
+  echo " ----- relinking content -----"
   ln -s $P2P_ROOT/trunk/content content
   bounce
 }
